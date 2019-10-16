@@ -164,8 +164,8 @@ function init() {
 }
 
 function reset() {
-	width = window.innerWidth - 200;
-	height = window.innerHeight - 120;
+	width = window.innerWidth - 600;
+	height = window.innerHeight - 160;
 	dots.length = 0;
 	tick = 0;
 	mx = width / 2;
