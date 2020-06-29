@@ -4,14 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+	<link href="css/style.css" rel="stylesheet"/>
+    <title>YOLO v3</title>
 </head>
 
 <body>
-    <div>
+    <div class="image">
         <img id="img" src="img.jpg" alt="Image" />
+		<div id="loader" class="loader"></div>
     </div>
-    <div>
+    <div style="width: 100%; text-align: center">
         <input type="file" id="inp" name="filename" />
     </div>
     <script>
@@ -29,6 +31,7 @@
                 if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                     var body = xhr.response["predict"];
                     show_image(body);
+					document.getElementById("loader").style.visibility = "hidden";
                 }
             }
             image = JSON.stringify({ "image": image })
@@ -39,7 +42,9 @@
             if (this.files && this.files[0]) {
                 var FR = new FileReader();
                 FR.addEventListener("load", function (e) {
-                    post(e.target.result)
+					document.getElementById("loader").style.visibility = "visible";
+					document.getElementById("img").src = e.target.result;
+                    post(e.target.result);
                 });
                 FR.readAsDataURL(this.files[0]);
             }
