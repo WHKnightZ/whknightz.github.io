@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <img id="img" src="img.jpg" alt="Image" />
+    </div>
+    <div>
+        <input type="file" id="inp" name="filename" />
+    </div>
+    <script>
+        function show_image(src) {
+            var img = document.getElementById("img");
+            img.src = "data:image/jpeg;charset=utf-8;base64," + src;
+        }
+
+        function post(image) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", 'https://whknightz-flask.herokuapp.com/api/utils/yolo', true);
+            xhr.responseType = 'json';
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                    var body = xhr.response["predict"];
+                    show_image(body);
+                }
+            }
+            image = JSON.stringify({ "image": image })
+            xhr.send(image);
+        }
+
+        function readFile() {
+            if (this.files && this.files[0]) {
+                var FR = new FileReader();
+                FR.addEventListener("load", function (e) {
+                    post(e.target.result)
+                });
+                FR.readAsDataURL(this.files[0]);
+            }
+        }
+
+        document.getElementById("inp").addEventListener("change", readFile);
+    </script>
+</body>
+
+</html>
