@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="css/style.css" rel="stylesheet"/>
+    <link href="css/style.css" rel="stylesheet" />
     <title>YOLO v3</title>
 </head>
 
 <body>
     <div class="image">
         <img id="img" src="img.jpg" alt="Image" />
-		<div id="loader" class="loader"></div>
+        <div id="loader" class="loader"></div>
     </div>
     <div style="width: 100%; text-align: center">
         <input type="file" id="inp" name="filename" />
@@ -31,7 +31,7 @@
                 if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                     var body = xhr.response["predict"];
                     show_image(body);
-					document.getElementById("loader").style.visibility = "hidden";
+                    document.getElementById("loader").style.visibility = "hidden";
                 }
             }
             image = JSON.stringify({ "image": image })
@@ -42,14 +42,35 @@
             if (this.files && this.files[0]) {
                 var FR = new FileReader();
                 FR.addEventListener("load", function (e) {
-					document.getElementById("loader").style.visibility = "visible";
-					document.getElementById("img").src = e.target.result;
-                    post(e.target.result);
+                    var img = new Image();
+                    var img = document.createElement('img');
+                    img.onload = function () {
+                        var ratio = img.width / img.height;
+                        var max_width = 1024, max_height = 640;
+                        var width = img.width, height = img.height;
+                        if (width > max_width) {
+                            width = max_width;
+                            height = width / ratio;
+                        }
+                        if (height > max_height) {
+                            height = max_height;
+                            width = height * ratio;
+                        }
+                        var canvas = document.createElement("canvas");
+                        canvas.width = width;
+                        canvas.height = height;
+                        var ctx = canvas.getContext("2d");
+                        ctx.drawImage(img, 0, 0, width, height);
+                        data = canvas.toDataURL("image/jpeg");
+                        document.getElementById("loader").style.visibility = "visible";
+                        document.getElementById("img").src = data;
+                        post(data);
+                    }
+                    img.src = e.target.result;
                 });
                 FR.readAsDataURL(this.files[0]);
             }
         }
-
         document.getElementById("inp").addEventListener("change", readFile);
     </script>
 </body>
