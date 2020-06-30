@@ -24,7 +24,7 @@
 
         function post(image) {
             var xhr = new XMLHttpRequest();
-            xhr.open("POST", 'https://whknightz-flask.herokuapp.com/api/utils/yolo', true);
+            xhr.open("POST", 'https://whknightz-ai.herokuapp.com/api/yolo', true);
             xhr.responseType = 'json';
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.onreadystatechange = function () {
