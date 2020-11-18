@@ -8,13 +8,20 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
 	<script type="text/javascript" src="jquery.min.js"></script>
 	<script type="text/javascript" src="qrcode.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 </head>
 
 <body style="background-color: #f9f9f9;">
 	<h2 style="margin: 40px; text-align: center;">Em chào anh, dạo này khỏe không?</h2>
 	<div style="display: flex; flex-direction: row; justify-content: center; margin-top: 40px;">
-		<textarea id="text" rows="9" cols="60" placeholder="Paste mã vào đây xong bấm Enter!"
-			style="margin: 0 60px 0 80px;"></textarea><br />
+		<div style="display: flex; flex-direction: column; margin: 0 60px 0 80px;">
+			<textarea id="text" rows="20" cols="60" placeholder="Paste mã vào đây xong bấm Enter!"></textarea>
+			<div style="margin: 20px;">
+				<label for="avatar" style="margin-right: 20px;">Hoặc chọn file excel đã xuất</label>
+				<input type="file" id="docpicker"
+					accept=".csv,application/vnd.ms-excel,.xlt,application/vnd.ms-excel,.xla,application/vnd.ms-excel,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.xltx,application/vnd.openxmlformats-officedocument.spreadsheetml.template,.xlsm,application/vnd.ms-excel.sheet.macroEnabled.12,.xltm,application/vnd.ms-excel.template.macroEnabled.12,.xlam,application/vnd.ms-excel.addin.macroEnabled.12,.xlsb,application/vnd.ms-excel.sheet.binary.macroEnabled.12">
+			</div>
+		</div>
 		<div>
 			<div id="qrcode"></div>
 			<div id="code" style="margin: 40px; font-weight: bold;">Mã: Khanh</div>
@@ -85,5 +92,50 @@
 					makeCode();
 				}
 			});
+
+		var file = document.getElementById('docpicker')
+		file.addEventListener('change', importFile);
+
+		function importFile(evt) {
+			var f = evt.target.files[0];
+
+			if (f) {
+				var r = new FileReader();
+				r.onload = e => {
+					var contents = processExcel(e.target.result);
+					var str = "";
+					for (var key in contents) {
+						var value = contents[key].slice(4);
+						value.forEach(v => {
+							str += (v[5] + "\n");
+						});
+					}
+					document.getElementById("text").innerHTML = str;
+					makeCode();
+				}
+				r.readAsBinaryString(f);
+			}
+		}
+
+		function processExcel(data) {
+			var workbook = XLSX.read(data, {
+				type: 'binary'
+			});
+
+			var firstSheet = workbook.SheetNames[0];
+			var data = to_json(workbook);
+			return data;
+		};
+
+		function to_json(workbook) {
+			var result = {};
+			workbook.SheetNames.forEach(function (sheetName) {
+				var roa = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
+					header: 1
+				});
+				if (roa.length) result[sheetName] = roa;
+			});
+			return result;
+		};
 	</script>
 </body>
