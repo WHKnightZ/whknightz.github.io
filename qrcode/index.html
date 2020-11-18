@@ -1,0 +1,89 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="vn">
+
+<head>
+	<title>Tạo QRCode By Nguyễn Khánh</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript" src="qrcode.js"></script>
+</head>
+
+<body style="background-color: #f9f9f9;">
+	<h2 style="margin: 40px; text-align: center;">Em chào anh, dạo này khỏe không?</h2>
+	<div style="display: flex; flex-direction: row; justify-content: center; margin-top: 40px;">
+		<textarea id="text" rows="9" cols="60" placeholder="Paste mã vào đây xong bấm Enter!"
+			style="margin: 0 60px 0 80px;"></textarea><br />
+		<div>
+			<div id="qrcode"></div>
+			<div id="code" style="margin: 40px; font-weight: bold;">Mã: Khanh</div>
+			<div style="display: flex; justify-content: space-around;">
+				<button onclick="prev()">Quay lại</button>
+				<button onclick="next()">Kế tiếp</button>
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript">
+		var codes;
+		var cur, count;
+
+		var qrcode = new QRCode(document.getElementById("qrcode"), {
+			width: 240,
+			height: 240
+		});
+
+		function prev() {
+			if (cur > 0) {
+				cur -= 1;
+				qrcode.makeCode(codes[cur]);
+				document.getElementById("code").innerHTML = "Mã: " + codes[cur];
+			}
+			else {
+				alert("Đang ở cái đầu mất rùi!");
+			}
+		}
+
+		function next() {
+			if (cur < count - 1) {
+				cur += 1;
+				qrcode.makeCode(codes[cur]);
+				document.getElementById("code").innerHTML = "Mã: " + codes[cur];
+			}
+			else {
+				alert("Hết rùi nha!");
+			}
+		}
+
+		function makeCode() {
+			var text = document.getElementById("text");
+
+			if (!text.value) {
+				alert("Paste mã vào trước đã!");
+				text.focus();
+				return;
+			}
+
+			codes = text.value.split(/\r?\n/).filter(x => x.length > 0);
+			cur = 0;
+			count = codes.length;
+
+			qrcode.makeCode(codes[cur]);
+			document.getElementById("code").innerHTML = "Mã: " + codes[cur];
+		}
+
+		qrcode.makeCode("Khanh");
+
+		$("#text").
+			// on("blur", function () {
+			// 	makeCode();
+			// }).
+			on("keydown", function (e) {
+				if (e.keyCode == 13) {
+					makeCode();
+				}
+			});
+	</script>
+</body>
