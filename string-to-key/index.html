@@ -1,0 +1,42 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="vn">
+
+<head>
+	<title>String to Key</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+	<script type="text/javascript" src="jquery.min.js"></script>
+</head>
+
+<body style="background-color: #f9f9f9;">
+	<h2 style="margin: 40px; text-align: center;">Copy string, and paste to your code!</h2>
+	<div style="display: flex; flex-direction: row; justify-content: center; margin-top: 40px;">
+		<div style="display: flex; flex-direction: column; margin: 0 60px 0 80px;">
+			<textarea id="text" rows="20" cols="80"
+				placeholder="Paste your string here, your new key will be automatic copied to the clipboard!"></textarea>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		var text = document.getElementById("text");
+
+		$("#text").
+			on("input", function (e) {
+				var value = e.target.value;
+				var strings = value.split(/\r?\n/).filter(x => x.length > 0);
+				var s = "";
+				for (var str of strings) {
+					str = str.toLowerCase();
+					str = str.replace(/[^a-z ]/g, " ");
+					str = str.trim();
+					str = str.replace(/\s+/g, '-');
+					s += str;
+					s += "\n";
+				}
+				text.value = s;
+				text.select();
+				document.execCommand("copy");
+			});
+	</script>
+</body>
