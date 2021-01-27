@@ -23,18 +23,14 @@
 
 		$("#text").
 			on("input", function (e) {
-				var value = e.target.value;
-				var strings = value.split(/\r?\n/).filter(x => x.length > 0);
-				var s = "";
-				for (var str of strings) {
-					str = str.toLowerCase();
-					str = str.replace(/[^a-z ]/g, " ");
-					str = str.trim();
-					str = str.replace(/\s+/g, '-');
-					s += str;
-					s += "\n";
-				}
-				text.value = s;
+				var str = e.target.value;
+				var str1 = str.trim();
+				str = str.toLowerCase();
+				str = str.replace(/[^a-z0-9 ]/g, " ");
+				str = str.slice(0, 14);
+				str = str.trim();
+				str = str.replace(/\s+/g, '-');
+				text.value = `"${str}": "${str1}",\n`;
 				text.select();
 				document.execCommand("copy");
 			});
