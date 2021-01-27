@@ -13,7 +13,14 @@
 	<h2 style="margin: 40px; text-align: center;">Copy string, and paste to your code!</h2>
 	<div style="display: flex; flex-direction: row; justify-content: center; margin-top: 40px;">
 		<div style="display: flex; flex-direction: column; margin: 0 60px 0 80px;">
-			<textarea id="text" rows="20" cols="80"
+			<textarea id="text" rows="10" cols="80"
+				placeholder="Paste your string here, your new key-value will be automatic copied to the clipboard!"></textarea>
+		</div>
+	</div>
+
+	<div style="display: flex; flex-direction: row; justify-content: center; margin-top: 40px;">
+		<div style="display: flex; flex-direction: column; margin: 0 60px 0 80px;">
+			<textarea id="text2" rows="10" cols="80"
 				placeholder="Paste your string here, your new key will be automatic copied to the clipboard!"></textarea>
 		</div>
 	</div>
@@ -27,11 +34,26 @@
 				var str1 = str.trim();
 				str = str.toLowerCase();
 				str = str.replace(/[^a-z0-9 ]/g, " ");
-				str = str.slice(0, 14);
+				str = str.slice(0, 30);
 				str = str.trim();
 				str = str.replace(/\s+/g, '-');
 				text.value = `"${str}": "${str1}",\n`;
 				text.select();
+				document.execCommand("copy");
+			});
+
+		var text2 = document.getElementById("text2");
+
+		$("#text2").
+			on("input", function (e) {
+				var str = e.target.value;
+				str = str.toLowerCase();
+				str = str.replace(/[^a-z0-9 ]/g, " ");
+				str = str.slice(0, 30);
+				str = str.trim();
+				str = str.replace(/\s+/g, '-');
+				text2.value = `"${str}"`;
+				text2.select();
 				document.execCommand("copy");
 			});
 	</script>
