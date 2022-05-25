@@ -36,7 +36,7 @@
 				str = str.replace(/[^a-z0-9 ]/g, " ");
 				str = str.slice(0, 30);
 				str = str.trim();
-				str = str.replace(/\s+/g, '-');
+				str = str.replace(/\s+/g, '_');
 				text.value = `"${str}": "${str1}",\n`;
 				text.select();
 				document.execCommand("copy");
@@ -51,7 +51,7 @@
 				str = str.replace(/[^a-z0-9 ]/g, " ");
 				str = str.slice(0, 30);
 				str = str.trim();
-				str = str.replace(/\s+/g, '-');
+				str = str.replace(/\s+/g, '_');
 				text2.value = `"${str}"`;
 				text2.select();
 				document.execCommand("copy");
