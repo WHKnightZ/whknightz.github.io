@@ -1,60 +1,70 @@
-<!DOCTYPE html
-	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="vn">
+  <head>
+    <title>String to Key</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <script type="text/javascript" src="jquery.min.js"></script>
+  </head>
 
-<head>
-	<title>String to Key</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
-	<script type="text/javascript" src="jquery.min.js"></script>
-</head>
+  <body style="background-color: #f9f9f9">
+    <h2 style="margin: 40px; text-align: center">Copy string, and paste to your code!</h2>
+    <div style="display: flex; flex-direction: row; justify-content: center; margin-top: 40px">
+      <div style="display: flex; flex-direction: column; margin: 0 60px 0 80px">
+        <textarea
+          id="text"
+          rows="10"
+          cols="100"
+          placeholder="Paste your string here, your new key-value will be automatic copied to the clipboard!"
+        ></textarea>
+      </div>
+    </div>
 
-<body style="background-color: #f9f9f9;">
-	<h2 style="margin: 40px; text-align: center;">Copy string, and paste to your code!</h2>
-	<div style="display: flex; flex-direction: row; justify-content: center; margin-top: 40px;">
-		<div style="display: flex; flex-direction: column; margin: 0 60px 0 80px;">
-			<textarea id="text" rows="10" cols="100"
-				placeholder="Paste your string here, your new key-value will be automatic copied to the clipboard!"></textarea>
-		</div>
-	</div>
+    <div style="display: flex; flex-direction: row; justify-content: center; margin-top: 40px">
+      <div style="display: flex; flex-direction: column; margin: 0 60px 0 80px">
+        <textarea
+          id="text2"
+          rows="10"
+          cols="100"
+          placeholder="Paste your string here, your new key will be automatic copied to the clipboard!"
+        ></textarea>
+      </div>
+    </div>
 
-	<div style="display: flex; flex-direction: row; justify-content: center; margin-top: 40px;">
-		<div style="display: flex; flex-direction: column; margin: 0 60px 0 80px;">
-			<textarea id="text2" rows="10" cols="100"
-				placeholder="Paste your string here, your new key will be automatic copied to the clipboard!"></textarea>
-		</div>
-	</div>
+    <script type="text/javascript">
+      var text = document.getElementById("text");
 
-	<script type="text/javascript">
-		var text = document.getElementById("text");
+      $("#text").on("input", function (e) {
+        var str = e.target.value;
+        var str1 = str.trim();
+        str = str.toLowerCase();
+        str = str.replace(/[^a-z0-9 ]/g, " ");
+        str = str.slice(0, 30);
+        str = str.trim();
+        str = str.replace(/\s+/g, "_");
+        text.value = `"${str}": "${str1}",\n`;
+        text.select();
+        document.execCommand("copy");
+      });
 
-		$("#text").
-			on("input", function (e) {
-				var str = e.target.value;
-				var str1 = str.trim();
-				str = str.toLowerCase();
-				str = str.replace(/[^a-z0-9 ]/g, " ");
-				str = str.slice(0, 30);
-				str = str.trim();
-				str = str.replace(/\s+/g, '_');
-				text.value = `"${str}": "${str1}",\n`;
-				text.select();
-				document.execCommand("copy");
-			});
+      var text2 = document.getElementById("text2");
 
-		var text2 = document.getElementById("text2");
+      $("#text2").on("input", function (e) {
+        var str2 = e.target.value;
+        var str3 = str2.trim().split(/\r?\n/);
+        text.value = "";
+        str3.forEach((str1) => {
+          let str = str1.toLowerCase();
+          str = str.replace(/[^a-z0-9 ]/g, " ");
+          str = str.slice(0, 30);
+          str = str.trim();
+          str = str.replace(/\s+/g, "_");
+          text.value += `"${str}": "${str1}",\n`;
+        });
 
-		$("#text2").
-			on("input", function (e) {
-				var str = e.target.value;
-				str = str.toLowerCase();
-				str = str.replace(/[^a-z0-9 ]/g, " ");
-				str = str.slice(0, 30);
-				str = str.trim();
-				str = str.replace(/\s+/g, '_');
-				text2.value = `"${str}"`;
-				text2.select();
-				document.execCommand("copy");
-			});
-	</script>
-</body>
+        text.select();
+        document.execCommand("copy");
+      });
+    </script>
+  </body>
+</html>
