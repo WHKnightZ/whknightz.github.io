@@ -35,21 +35,6 @@
       var text = document.getElementById("text");
 
       $("#text").on("input", function (e) {
-        var str = e.target.value;
-        var str1 = str.trim();
-        str = str.toLowerCase();
-        str = str.replace(/[^a-z0-9 ]/g, " ");
-        str = str.slice(0, 30);
-        str = str.trim();
-        str = str.replace(/\s+/g, "_");
-        text.value = `"${str}": "${str1}",\n`;
-        text.select();
-        document.execCommand("copy");
-      });
-
-      var text2 = document.getElementById("text2");
-
-      $("#text2").on("input", function (e) {
         var str2 = e.target.value;
         var str3 = str2.trim().split(/\r?\n/);
         text.value = "";
@@ -63,6 +48,18 @@
         });
 
         text.select();
+        document.execCommand("copy");
+      });
+
+      $("#text2").on("input", function (e) {
+        var str = e.target.value;
+        str = str.toLowerCase();
+        str = str.replace(/[^a-z0-9 ]/g, " ");
+        str = str.slice(0, 30);
+        str = str.trim();
+        str = str.replace(/\s+/g, "-");
+        text2.value = `"${str}"`;
+        text2.select();
         document.execCommand("copy");
       });
     </script>
